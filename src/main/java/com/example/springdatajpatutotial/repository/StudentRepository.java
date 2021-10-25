@@ -20,6 +20,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     public List<Student> findByLastNameNotNull();
     public List<Student> findByGuardianName(String guardianName);
     public List<Student> findByFirstNameAndLastName(String firstName, String lastName);
+    public List<Student> deleteByFirstName(String firstName);
 
     //JPQL queries
     @Query("select s from Student s where s.emailId = ?1")
@@ -49,5 +50,15 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
             nativeQuery = true
     )
       int updateLastNameByEmail(@Param("lastName") String lastName, @Param("email") String email);
+
+
+
+    @Modifying
+    @Transactional
+    @Query(
+            value = "update tbl_student s set guardian_mobile = :guardianMobile where first_name = :firstName",
+            nativeQuery = true
+    )
+    int updateGuardianPhoneByFirstName(@Param("guardianMobile") String guardianMobile, @Param("firstName") String firstName);
 
 }

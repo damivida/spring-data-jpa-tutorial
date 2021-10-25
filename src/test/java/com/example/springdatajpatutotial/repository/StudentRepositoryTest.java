@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
 import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 class StudentRepositoryTest {
@@ -166,6 +169,31 @@ class StudentRepositoryTest {
        int studentUpdated =  studentRepository.updateLastNameByEmail(lastName,email);
        System.out.println("Student updated: " + studentUpdated);
        Assertions.assertEquals(1, studentUpdated);
+    }
+
+     @Test
+    public void updateGuardianPhoneByFirstName() {
+
+        String firstName = "Jane";
+        String guardianPhone = "333-555";
+
+        int guardianUpdated = studentRepository.updateGuardianPhoneByFirstName(guardianPhone, firstName);
+        System.out.println("Guardian updated: " + guardianUpdated);
+
+        Assertions.assertEquals(2, guardianUpdated);
+
+    }
+
+    @Test
+    @Transactional
+    public void deleteByFirstName() {
+
+        String firstName = "Jane";
+
+        List<Student> studentsDeleted = studentRepository.deleteByFirstName(firstName);
+
+        studentsDeleted.forEach(student -> System.out.println(student));
+        Assertions.assertEquals(firstName,studentsDeleted.get(0).getFirstName());
     }
 
 }
